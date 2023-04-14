@@ -1,0 +1,63 @@
+{
+	"msg": "success",
+	"result": {
+		"owner": "493765909@qq.com",
+		"nodes": [
+			{
+				"id": "ads_analytic_store_face",
+				"type": "hivejdbc",
+				"parameters": [
+					{
+						"first": "azkaban_execute_disable",
+						"second": "false"
+					},
+					{
+						"first": "hive.query.04",
+						"second": "\nset hive.exec.dynamic.partition.mode = nonstrict;"
+					},
+					{
+						"first": "azk.hive.action",
+						"second": "execute.query"
+					},
+					{
+						"first": "hive.query.05",
+						"second": "\nset hive.auto.convert.join = true;"
+					},
+					{
+						"first": "hive.query.06",
+						"second": "\n\n/*自助分析-进店客流及转化率分析*/\nINSERT OVERWRITE TABLE cdm.ads_analytic_store_face partition(ds)\nselect \n/*+ mapjoin(c)*/ \na.store_id,-- 门店代码\nc.store_name,-- 门店名称\nb.company_id,-- 人脸供应商id\nb.company_name,-- 人脸供应商名称\nb.uv,-- 客流量\nb.uniq_uv,-- 进店人数(去重)\na.clao_order_cnt_1d_cnt,-- pos零售客单量\na.clao_achi_qty_1d_sum,-- pos零售商品数量\na.clao_achi_amt_1d_sum,-- pos零售实收金额\nc.area_class2_name,-- 二级区域\nc.area_class1_name,-- 一级区域\nc.class2_area_manage_name,-- 区域经理\nc.class1_area_manage_name,-- 大区协理\nc.sts_state,-- 门店状态\nc.store_level,-- 门店销售等级\nc.biz_area_name,-- 所属商圈\nc.open_date,-- 开业日期\nc.close_date,-- 关店日期\nc.address,-- 地址\nc.district_name,-- 所在区县\nc.city_name,-- 所在城市\nc.province_name,-- 所在省\nc.country_name,-- 所在国家\nc.city_level,-- 城市等级\nc.store_type,-- 门店类型\nc.operate_size,-- 门店面积\nc.size_level,-- 面积等级\nc.telephone,-- 联系电话\nc.secbiz_area_name,-- 第二所属商圈\nc.org_name,-- 所属组织\nc.orig_store_name,-- 来源门店\nc.plan_staffcnt,-- 定编人数\nc.delivery_wrh,-- 主配送仓库代码\nc.delivery_wrh_name,-- 主配送仓库名称\nc.old_store_gid,-- 旧海鼎门店代码\nc.store_image_name,-- 门店形象方案\na.ds -- 进店日期\nfrom cdm.dws_trd_clao_brand_store_1d a\nleft join cdm.dws_traffic_sstore_flow_1d b on (a.store_id = b.store_id and a.ds = b.ds)\nleft join cdm.dim_store_info_lastest c on (a.store_id = b.store_id)\nwhere a.ds >= date_sub('${azkaban.flow.1.days.ago}',31)\n  and a.ds <= '${azkaban.flow.1.days.ago}'\n;"
+					},
+					{
+						"first": "hive.query.01",
+						"second": "--name:tmp_code_5\n--author:Administrator\n--create time:2019-09-10 16:48\n\nset hive.exec.max.dynamic.partitions.pernode = 100000;"
+					},
+					{
+						"first": "hive.query.02",
+						"second": "\nset hive.exec.max.dynamic.partitions = 1000000;"
+					},
+					{
+						"first": "hive.query.03",
+						"second": "\nset hive.exec.max.created.files = 100000000;"
+					},
+					{
+						"first": "type",
+						"second": "hivejdbc"
+					},
+					{
+						"first": "dependencies",
+						"second": ""
+					}
+				]
+			}
+		],
+		"project": "95622a4aba57450f8b6def802689c820",
+		"projectId": 7453,
+		"flowName": "ads_analytic_store_face",
+		"flowAliasName": "ads_analytic_store_face",
+		"flow": "ads_analytic_store_face",
+		"projectAliasName": "ads_analytic_store_face"
+	},
+	"code": 200,
+	"cost": 16,
+	"reqId": "4e762818db9841b5b3a43985af0326c4"
+}
